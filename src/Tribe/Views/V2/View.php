@@ -970,7 +970,7 @@ class View implements View_Interface {
 		$context_arr = $context->to_array();
 
 		$args = [
-			'posts_per_page'       => $context_arr['events_per_page'],
+			'posts_per_page'       => $context->get( 'events_per_page', 12 ),
 			'paged'                => max( Arr::get_first_set( array_filter( $context_arr ), [
 				'paged',
 				'page',
@@ -980,12 +980,12 @@ class View implements View_Interface {
 		];
 
 		// Set's up category URL for all views.
-		if ( ! empty( $context_arr[ TEC::TAXONOMY ] ) ) {
-			$args[ TEC::TAXONOMY ] = $context_arr[ TEC::TAXONOMY ];
+		if ( $taxonomy_value = $context->get( TEC::TAXONOMY, false ) ) {
+			$args[ TEC::TAXONOMY ] = $taxonomy_value;
 		}
 
 		// Setup featured only when set to true.
-		if ( $is_featured = tribe_is_truthy( $this->context->get( 'featured', false ) ) ) {
+		if ( $is_featured = tribe_is_truthy( $context->get( 'featured', false ) ) ) {
 			$args['featured'] = $is_featured;
 		} else {
 			unset( $args['featured'] );
